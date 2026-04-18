@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Stoks\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Facades\Auth;
@@ -24,21 +23,11 @@ class StokForm
                 ->required()
                 ->searchable()
                 ->preload(),
-            DateTimePicker::make('stok_tanggal')
-                ->label('Tanggal Stok')
-                ->required()
-                ->default(now()),
             TextInput::make('stok_jumlah')
                 ->label('Jumlah Stok')
                 ->numeric()
-                ->required(),
-            Select::make('user_id')
-                ->label('User')
-                ->relationship('user', 'nama')
                 ->required()
-                ->default(Auth::id())
-                ->disabled()
-                ->dehydrated(),
+                ->minValue(1),
         ];
     }
 }

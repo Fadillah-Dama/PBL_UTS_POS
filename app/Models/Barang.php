@@ -23,6 +23,14 @@ class Barang extends Model
         'harga_jual',
     ];
 
+    public function getCurrentStockAttribute(): int
+    {
+        $added = $this->stok()->sum('stok_jumlah');
+        $sold = $this->penjualanDetail()->sum('jumlah');
+
+        return $added - $sold;
+    }
+
     public function kategori(): BelongsTo
     {
         return $this->belongsTo(Kategori::class, 'kategori_id', 'kategori_id');

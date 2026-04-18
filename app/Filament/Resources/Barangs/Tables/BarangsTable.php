@@ -27,6 +27,9 @@ class BarangsTable
                 TextColumn::make('kategori.kategori_nama')
                     ->label('Kategori')
                     ->searchable(),
+                TextColumn::make('current_stock')
+                    ->label('Stok Saat Ini')
+                    ->getStateUsing(fn ($record) => $record->current_stock),
                 TextColumn::make('harga_beli')
                     ->label('Harga Beli')
                     ->money('IDR', locale: 'id_ID'),
