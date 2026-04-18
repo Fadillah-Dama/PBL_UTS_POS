@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Filament\Resources\Stoks;
+
+use App\Filament\Resources\AdminResource;
+use App\Filament\Resources\Stoks\Pages\CreateStok;
+use App\Filament\Resources\Stoks\Pages\EditStok;
+use App\Filament\Resources\Stoks\Pages\ListStoks;
+use App\Filament\Resources\Stoks\Schemas\StokForm;
+use App\Filament\Resources\Stoks\Tables\StoksTable;
+use App\Models\Stok;
+use BackedEnum;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
+
+class StokResource extends AdminResource
+{
+    protected static ?string $model = Stok::class;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArchiveBox;
+
+    protected static ?string $navigationLabel = 'Transaksi Stok';
+
+    protected static ?string $slug = 'transaksi-stok';
+
+    public static function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components(StokForm::schema());
+    }
+
+    public static function table(Table $table): Table
+    {
+        return StoksTable::configure($table);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListStoks::route('/'),
+            'create' => CreateStok::route('/create'),
+            'edit' => EditStok::route('/{record}/edit'),
+        ];
+    }
+}
