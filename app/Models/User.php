@@ -36,6 +36,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function getNameAttribute(): string
+    {
+        return $this->nama;
+    }
+
     public function level(): BelongsTo
     {
         return $this->belongsTo(Level::class, 'level_id', 'level_id');

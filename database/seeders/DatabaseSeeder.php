@@ -15,11 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $adminLevel = \App\Models\Level::firstOrCreate([
+            'level_kode' => 'ADM',
+        ], [
+            'level_nama' => 'Admin',
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        \App\Models\User::firstOrCreate([
+            'username' => 'admin',
+        ], [
+            'level_id' => $adminLevel->level_id,
+            'email' => 'admin@gmail.com',
+            'nama' => 'Administrator',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
         ]);
     }
 }
