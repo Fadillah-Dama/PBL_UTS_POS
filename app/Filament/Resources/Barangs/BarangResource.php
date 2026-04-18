@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Barangs;
 
+use App\Filament\Resources\AdminResource;
 use App\Filament\Resources\Barangs\Pages\CreateBarang;
 use App\Filament\Resources\Barangs\Pages\EditBarang;
 use App\Filament\Resources\Barangs\Pages\ListBarangs;
@@ -9,12 +10,11 @@ use App\Filament\Resources\Barangs\Schemas\BarangForm;
 use App\Filament\Resources\Barangs\Tables\BarangsTable;
 use App\Models\Barang;
 use BackedEnum;
-use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class BarangResource extends Resource
+class BarangResource extends AdminResource
 {
     protected static ?string $model = Barang::class;
 

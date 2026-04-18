@@ -12,6 +12,7 @@ use App\Models\Stok;
 use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -22,16 +23,15 @@ class CashierCheckoutTest extends TestCase
     public function test_checkout_creates_sale_and_sale_details(): void
     {
         [$cashier, $barang] = $this->createCheckoutFixtures(initialStock: 5);
+        Auth::login($cashier);
 
         Livewire::test(CashierTerminal::class)
             ->set('buyerName', 'Budi')
-            ->set('selectedUser', (string) $cashier->getKey())
             ->call('addToCart', $barang->getKey())
             ->call('updateQty', $barang->getKey(), 3)
             ->call('checkout')
             ->assertSet('cart', [])
-            ->assertSet('buyerName', '')
-            ->assertSet('selectedUser', null);
+            ->assertSet('buyerName', '');
 
         $this->assertDatabaseCount('t_penjualan', 1);
         $this->assertDatabaseHas('t_penjualan', [
@@ -59,9 +59,9 @@ class CashierCheckoutTest extends TestCase
     public function test_checkout_requires_buyer_name(): void
     {
         [$cashier, $barang] = $this->createCheckoutFixtures(initialStock: 5);
+        Auth::login($cashier);
 
         Livewire::test(CashierTerminal::class)
-            ->set('selectedUser', (string) $cashier->getKey())
             ->call('addToCart', $barang->getKey())
             ->call('checkout')
             ->assertSet("cart.{$barang->getKey()}.qty", 1)
@@ -73,10 +73,10 @@ class CashierCheckoutTest extends TestCase
     public function test_checkout_stops_when_stock_is_fully_consumed_before_payment(): void
     {
         [$cashier, $barang] = $this->createCheckoutFixtures(initialStock: 3);
+        Auth::login($cashier);
 
         $component = Livewire::test(CashierTerminal::class)
             ->set('buyerName', 'Budi')
-            ->set('selectedUser', (string) $cashier->getKey())
             ->call('addToCart', $barang->getKey())
             ->call('updateQty', $barang->getKey(), 3);
 

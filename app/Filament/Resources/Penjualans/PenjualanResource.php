@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Penjualans;
 
+use App\Filament\Resources\AdminResource;
 use App\Filament\Resources\Penjualans\Pages\CreatePenjualan;
 use App\Filament\Resources\Penjualans\Pages\EditPenjualan;
 use App\Filament\Resources\Penjualans\Pages\ListPenjualans;
@@ -9,12 +10,11 @@ use App\Filament\Resources\Penjualans\Schemas\PenjualanForm;
 use App\Filament\Resources\Penjualans\Tables\PenjualansTable;
 use App\Models\Penjualan;
 use BackedEnum;
-use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class PenjualanResource extends Resource
+class PenjualanResource extends AdminResource
 {
     protected static ?string $model = Penjualan::class;
 

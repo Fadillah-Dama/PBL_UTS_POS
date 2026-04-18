@@ -138,16 +138,12 @@
                             class="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-900 focus:ring-0"
                         >
 
-                        <label for="kasir" class="mb-2 mt-5 block text-sm font-medium text-slate-700">Pilih kasir</label>
-                        <select wire:model="selectedUser" id="kasir" class="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 focus:border-slate-900 focus:ring-0">
-                            <option value="">-- Pilih Kasir --</option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->user_id }}">{{ $user->nama }}</option>
-                            @endforeach
-                        </select>
-
                         <div class="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                             <div class="flex items-center justify-between">
+                                <span>Kasir aktif</span>
+                                <span class="font-semibold text-slate-900">{{ auth()->user()?->nama }}</span>
+                            </div>
+                            <div class="mt-2 flex items-center justify-between">
                                 <span>Jumlah item</span>
                                 <span class="font-semibold text-slate-900">{{ $this->totalItems }}</span>
                             </div>
@@ -160,7 +156,7 @@
                         <button
                             wire:click="checkout"
                             wire:loading.attr="disabled"
-                            @disabled(empty($cart) || ! $selectedUser)
+                            @disabled(empty($cart) || blank($buyerName))
                             class="mt-6 w-full rounded-2xl bg-slate-900 px-6 py-4 text-base font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
                         >
                             <span wire:loading.remove>Checkout Sekarang</span>
@@ -168,13 +164,11 @@
                         </button>
 
                         <p class="mt-3 text-center text-xs uppercase tracking-[0.24em] text-slate-500">
-                            {{ empty($cart) ? 'Pilih produk untuk mulai checkout' : (blank($buyerName) ? 'Isi nama pembeli' : (! $selectedUser ? 'Pilih kasir sebelum checkout' : 'Siap diproses')) }}
+                            {{ empty($cart) ? 'Pilih produk untuk mulai checkout' : (blank($buyerName) ? 'Isi nama pembeli' : 'Siap diproses') }}
                         </p>
                     </div>
                 </section>
             </div>
         </aside>
     </div>
-
-    @livewire('notifications')
 </div>

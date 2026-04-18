@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -39,6 +41,28 @@ class User extends Authenticatable
     public function getNameAttribute(): string
     {
         return $this->nama;
+    }
+
+    public function hasLevel(string ...$codes): bool
+    {
+        $levelCode = $this->level?->level_kode;
+
+        return in_array($levelCode, $codes, true);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasLevel('ADM');
+    }
+
+    public function isCashier(): bool
+    {
+        return $this->hasLevel('KSR');
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasLevel('ADM', 'KSR');
     }
 
     public function level(): BelongsTo

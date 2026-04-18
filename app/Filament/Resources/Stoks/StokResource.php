@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Stoks;
 
+use App\Filament\Resources\AdminResource;
 use App\Filament\Resources\Stoks\Pages\CreateStok;
 use App\Filament\Resources\Stoks\Pages\EditStok;
 use App\Filament\Resources\Stoks\Pages\ListStoks;
@@ -9,12 +10,11 @@ use App\Filament\Resources\Stoks\Schemas\StokForm;
 use App\Filament\Resources\Stoks\Tables\StoksTable;
 use App\Models\Stok;
 use BackedEnum;
-use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class StokResource extends Resource
+class StokResource extends AdminResource
 {
     protected static ?string $model = Stok::class;
 

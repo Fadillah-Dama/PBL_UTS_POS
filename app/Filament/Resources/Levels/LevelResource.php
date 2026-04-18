@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Levels;
 
+use App\Filament\Resources\AdminResource;
 use App\Filament\Resources\Levels\Pages\CreateLevel;
 use App\Filament\Resources\Levels\Pages\EditLevel;
 use App\Filament\Resources\Levels\Pages\ListLevels;
@@ -9,12 +10,11 @@ use App\Filament\Resources\Levels\Schemas\LevelForm;
 use App\Filament\Resources\Levels\Tables\LevelsTable;
 use App\Models\Level;
 use BackedEnum;
-use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class LevelResource extends Resource
+class LevelResource extends AdminResource
 {
     protected static ?string $model = Level::class;
 

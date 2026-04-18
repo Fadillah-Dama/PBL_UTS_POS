@@ -7,13 +7,12 @@ use App\Models\Barang;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use App\Models\User;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CheckoutService
 {
-    public function checkout(array $cart, int|string|null $cashierId, ?string $buyerName): CheckoutResult
+    public function checkout(array $cart, int|string|null $cashierId, ?string $buyerName): void
     {
         if (empty($cart)) {
             throw new CheckoutException('Keranjang kosong.');
@@ -23,6 +22,10 @@ class CheckoutService
 
         if (! $cashier) {
             throw new CheckoutException('Kasir tidak valid.');
+        }
+
+        if (! $cashier->hasLevel('ADM', 'KSR')) {
+            throw new CheckoutException('User yang dipilih bukan kasir.');
         }
 
         $buyerName = trim((string) $buyerName);
@@ -38,7 +41,7 @@ class CheckoutService
 
         $saleCode = 'SLS-'.Str::upper(Str::random(8));
 
-        $penjualan = DB::transaction(function () use ($cart, $cashier, $barangIds, $saleCode, $buyerName) {
+        DB::transaction(function () use ($cart, $cashier, $barangIds, $saleCode, $buyerName) {
             Barang::query()
                 ->whereIn('barang_id', $barangIds)
                 ->lockForUpdate()
@@ -93,18 +96,5 @@ class CheckoutService
 
             return $penjualan;
         }, 3);
-
-        return new CheckoutResult(
-            saleCode: $saleCode,
-            cashierName: $cashier->nama,
-            buyerName: $buyerName,
-            total: $this->calculateTotal(collect($cart)),
-            penjualanId: $penjualan->getKey(),
-        );
-    }
-
-    protected function calculateTotal(Collection $cart): int
-    {
-        return $cart->sum(fn (array $item) => ((int) $item['harga']) * ((int) $item['qty']));
     }
 }

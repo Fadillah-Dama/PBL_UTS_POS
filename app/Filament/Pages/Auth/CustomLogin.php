@@ -2,11 +2,11 @@
 
 namespace App\Filament\Pages\Auth;
 
+use Filament\Auth\Pages\Login as BaseLogin;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Schema;
-use Filament\Auth\Pages\Login as BaseLogin;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class CustomLogin extends BaseLogin
 {
@@ -26,9 +26,15 @@ class CustomLogin extends BaseLogin
         return TextInput::make('username')
             ->label('Username')
             ->required()
-            ->autocomplete()
             ->autofocus()
-            ->extraInputAttributes(['name' => 'username']);
+            ->extraInputAttributes([
+                'name' => 'username',
+                'autocomplete' => 'off',
+                'autocapitalize' => 'none',
+                'autocorrect' => 'off',
+                'spellcheck' => 'false',
+                'data-lpignore' => 'true',
+            ]);
     }
 
     protected function getCredentialsFromFormData(array $data): array
@@ -41,7 +47,7 @@ class CustomLogin extends BaseLogin
 
     protected function throwFailureValidationException(): never
     {
-        throw \Illuminate\Validation\ValidationException::withMessages([
+        throw ValidationException::withMessages([
             'data.username' => __('filament-panels::auth/pages/login.messages.failed'),
         ]);
     }
